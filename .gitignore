@@ -1,3 +1,5 @@
 displaylink-*.src.rpm
 i386/
 x86_64/
+*.tar.gz
+*.zip
