@@ -5,9 +5,7 @@ set -e
 sudo --validate
 
 make clean
-make evdi-devel
-
-QA_RPATHS=$(( 0x0004 )) make
+QA_RPATHS=$(( 0x0004 )) make rawhide
 
 sudo dnf -y remove displaylink || true
 
