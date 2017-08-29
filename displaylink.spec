@@ -15,7 +15,7 @@ Source3:    displaylink-sleep-extractor.sh
 Source4:	DisplayLink USB Graphics Software for Ubuntu %{_daemon_version}.zip
 Source5:    20-displaylink.conf
 Source6:    dkms-evdi.conf
-Source7:    sign-dkms-modules.conf
+Source7:    sign-evdi-modules.sh
 ExclusiveArch:	i386 x86_64
 
 BuildRequires:	libdrm-devel
@@ -47,13 +47,13 @@ make %{?_smp_mflags}
 
 mkdir -p $RPM_BUILD_ROOT/usr/libexec/displaylink/ \
     $RPM_BUILD_ROOT/usr/src/evdi-%{version}/ \
-    $RPM_BUILD_ROOT/lib/systemd/system/ \
-    $RPM_BUILD_ROOT/lib/systemd/system-sleep/ \
+    $RPM_BUILD_ROOT/usr/lib/systemd/system/ \
+    $RPM_BUILD_ROOT/usr/lib/systemd/system-sleep/ \
     $RPM_BUILD_ROOT/etc/dkms/ \
     $RPM_BUILD_ROOT/etc/udev/rules.d/ \
     $RPM_BUILD_ROOT/etc/X11/xorg.conf.d/ \
     $RPM_BUILD_ROOT/var/log/displaylink/ \
-    $RPM_BUILD_ROOT/root
+    $RPM_BUILD_ROOT/root/
 
 # Kernel driver sources
 pushd $RPM_BUILD_ROOT/usr/src/evdi-%{version} ; \
@@ -92,9 +92,10 @@ bash %{SOURCE3} displaylink-installer.sh > $RPM_BUILD_ROOT/usr/lib/systemd/syste
 
 chmod +x $RPM_BUILD_ROOT/usr/lib/systemd/system-sleep/displaylink.sh
 
-# dkms override
-cp dkms-evdi.conf /$RPM_BUILD_ROOT/etc/dkms/evdi.conf
-chmod 0700 /$RPM_BUILD_ROOT/etc/dkms/evdi.conf
+# dkms overrides for signing modules
+cp %{SOURCE6} /$RPM_BUILD_ROOT/etc/dkms/evdi.conf
+cp %{SOURCE7} /$RPM_BUILD_ROOT/root/sign-evdi-module.sh
+chmod 0700 /$RPM_BUILD_ROOT/root/sign-evdi-module.sh
 
 %post
 # The displaylink service may crash as dkms rebuilds the module
@@ -110,7 +111,7 @@ done
 %doc LICENSE
 /usr/lib/systemd/system/displaylink.service
 /usr/lib/systemd/system-sleep/displaylink.sh
-%config(noreplace) /etc/dkms/edvi.conf
+%config(noreplace) /etc/dkms/evdi.conf
 /etc/udev/rules.d/99-displaylink.rules
 %config(noreplace) /etc/X11/xorg.conf.d/20-displaylink.conf
 %dir /usr/src/evdi-%{version}
@@ -118,7 +119,7 @@ done
 %dir /usr/libexec/displaylink
 /usr/libexec/displaylink/*
 %dir /var/log/displaylink/
-%config(noreplace) %attr(0700,root,root) /root/sign-evdi-modules.sh
+%config(noreplace) %attr(0700,root,root) /root/sign-evdi-module.sh
 
 %preun
 if [ $1 -eq 0 ] ;then
@@ -130,7 +131,7 @@ fi
 /usr/bin/systemctl daemon-reload
 
 %changelog
-* Wed Aug 30 2017 Kahlil Hodgson <kahlil.hodgson999@gmail.com> 1.1.4-5
+* Wed Aug 30 2017 Kahlil Hodgson <kahlil.hodgson999@gmail.com> 1.1.4-6
 - Add optional support for signing dkms modules
 
 * Wed Aug 17 2017 Kahlil Hodgson <kahlil.hodgson999@gmail.com> 1.1.4-5
