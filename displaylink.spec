@@ -90,7 +90,7 @@ chmod +x $RPM_BUILD_ROOT/usr/lib/systemd/system-sleep/displaylink.sh
 
 %post
 # The displaylink service may crash as dkms rebuilds the module
-//usr/bin/systemctl -q is-active displaylink.service && usr/bin/systemctl stop displaylink.service
+/usr/bin/systemctl -q is-active displaylink.service && /usr/bin/systemctl stop displaylink.service
 /usr/bin/systemctl daemon-reload
 /usr/bin/systemctl -q is-enabled dkms.service || /usr/bin/systemctl enable dkms.service
 for kernel in $(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n') ;do
@@ -120,7 +120,7 @@ fi
 /usr/bin/systemctl daemon-reload
 
 %changelog
-* Wed Aug 17 2017 Kahlil Hodgson <kahlil.hodgson999@gmail.com> 1.1.4-5
+* Thu Aug 17 2017 Kahlil Hodgson <kahlil.hodgson999@gmail.com> 1.1.4-5
 - Restart displaylink service around dkms rebuild
 - Make setup quiet as per fedora/redhat guidelines
 
