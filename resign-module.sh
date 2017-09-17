@@ -2,5 +2,19 @@
 
 set -e
 
-sudo /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 ~/.MOK.priv ~/.MOK.der \
-    /lib/modules/$(uname -r)/extra/evdi.ko
+sudo --validate
+
+private_key=~/.MOK.priv
+public_key=~/.MOK.der
+
+# if we have just installed a kernel, it may not be the current, so just
+# sign everything we can find
+for kernel in $(ls -1 /usr/src/kernels)
+do
+    if [[ -f /lib/modules/$kernel/extra/evdi.ko ]]
+    then
+        echo signing /lib/modules/$kernel/extra/evdi.ko
+        sudo /usr/src/kernels/$kernel/scripts/sign-file sha256 $private_key $public_key \
+            /lib/modules/$kernel/extra/evdi.ko
+    fi
+done
