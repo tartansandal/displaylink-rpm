@@ -7,11 +7,15 @@ sudo --validate
 make clean
 QA_RPATHS=$(( 0x0004 )) make rawhide
 
-sudo dnf -y remove displaylink || true
+new=$(ls -1 x86_64/*.rpm | tail -1)
+old=x86_64/$(rpm -q displaylink).rpm
 
-package=$(ls -1 x86_64/*.rpm | tail -1)
-sudo dnf -y install $package
+if [[ $new == $old ]]
+then
+  sudo dnf -y reinstall $new
+else
+  sudo dnf -y upgrade $new
+fi
 
 ./resign-module.sh
 
-sudo systemctl restart displaylink.service
