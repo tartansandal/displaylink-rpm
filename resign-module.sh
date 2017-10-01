@@ -4,8 +4,8 @@ set -e
 
 sudo --validate
 
-private_key=~/.MOK.priv
-public_key=~/.MOK.der
+private_key='/run/media/kal/MyKeys/MOK.priv'
+public_key='/run/media/kal/MyKeys/MOK.der'
 
 # if we have just installed a kernel, it may not be the current, so just
 # sign everything we can find
