@@ -17,5 +17,3 @@ else
   sudo dnf -y upgrade $new
 fi
 
-./resign-module.sh
-
