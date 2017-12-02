@@ -43,14 +43,13 @@ make %{?_smp_mflags}
 
 %install
 
-mkdir -p $RPM_BUILD_ROOT/usr/libexec/displaylink/ \
-    $RPM_BUILD_ROOT/usr/src/evdi-%{version}/ \
-    $RPM_BUILD_ROOT/usr/lib/systemd/system/ \
-    $RPM_BUILD_ROOT/usr/lib/systemd/system-sleep/ \
-    $RPM_BUILD_ROOT/etc/udev/rules.d/ \
-    $RPM_BUILD_ROOT/etc/X11/xorg.conf.d/ \
-    $RPM_BUILD_ROOT/var/log/displaylink/ \
-    $RPM_BUILD_ROOT/root/
+mkdir -p $RPM_BUILD_ROOT/usr/libexec/displaylink/	\
+	$RPM_BUILD_ROOT/usr/src/evdi-%{version}/	\
+	$RPM_BUILD_ROOT/usr/lib/systemd/system/		\
+	$RPM_BUILD_ROOT/usr/lib/systemd/system-sleep	\
+	$RPM_BUILD_ROOT/etc/udev/rules.d/		\
+	$RPM_BUILD_ROOT/etc/X11/xorg.conf.d/		\
+	$RPM_BUILD_ROOT/var/log/displaylink/
 
 # Kernel driver sources
 pushd $RPM_BUILD_ROOT/usr/src/evdi-%{version} ; \
@@ -104,7 +103,7 @@ done
 /usr/lib/systemd/system/displaylink.service
 /usr/lib/systemd/system-sleep/displaylink.sh
 /etc/udev/rules.d/99-displaylink.rules
-%config(noreplace) /etc/X11/xorg.conf.d/20-displaylink.conf
+/etc/X11/xorg.conf.d/20-displaylink.conf
 %dir /usr/src/evdi-%{version}
 /usr/src/evdi-%{version}/*
 %dir /usr/libexec/displaylink
